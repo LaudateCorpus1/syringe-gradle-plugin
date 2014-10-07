@@ -1,0 +1,16 @@
+apply plugin: "groovy"
+apply plugin: "java-gradle-plugin"
+
+group = "com.avast"
+version = "1.0-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "com.avast:syringe_2.10:1.6.13"
+    compile "org.reflections:reflections:0.9.9"
+    compile "org.apache.commons:commons-vfs2:2.0" // optional but necessary (one of several implementations) dependency of the reflections library
+}
+
