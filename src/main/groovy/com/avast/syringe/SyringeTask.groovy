@@ -2,6 +2,7 @@ package com.avast.syringe
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskExecutionException
 
 import static java.io.File.separator
@@ -43,8 +44,11 @@ abstract class SyringeTask extends DefaultTask {
         getExtension().builderTraits
     }
 
+    @OutputFile
+    File paletteFile
+
     protected File paletteFile() {
-        project.file(directory() +
+        paletteFile = project.file(directory() +
                 separator +
                 palettePackage().replaceAll("\\.", separator) +
                 separator +
