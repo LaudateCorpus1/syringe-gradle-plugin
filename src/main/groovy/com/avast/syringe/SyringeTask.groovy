@@ -1,13 +1,13 @@
 package com.avast.syringe
 
-import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskExecutionException
 
 import static java.io.File.separator
 
-abstract class SyringeTask extends DefaultTask {
+abstract class SyringeTask extends SourceTask {
 
     SyringeTask(String description) {
         this.description = description
@@ -15,50 +15,38 @@ abstract class SyringeTask extends DefaultTask {
     }
 
     @Input
-    String directory() {
-        getExtension().directory
-    }
+    String directory
 
     @Input
-    String paletteName() {
-        getExtension().paletteName
-    }
+    String paletteName
 
     @Input
-    String palettePackage() {
-        getExtension().palettePackage
-    }
+    String palettePackage
 
     @Input
-    String paletteDescription() {
-        getExtension().paletteDescription
-    }
+    String paletteDescription
 
     @Input
-    List<String> paletteTraits() {
-        getExtension().paletteTraits
-    }
+    List<String> paletteTraits
 
     @Input
-    Properties builderTraits() {
-        getExtension().builderTraits
-    }
+    Properties builderTraits
 
     @OutputFile
     File paletteFile
 
     protected File paletteFile() {
-        paletteFile = project.file(directory() +
+        def extension = (GradlePluginExtension) project.extensions.findByName(GradlePlugin.EXTENSION_NAME);
+        directory = extension.directory
+        palettePackage = extension.palettePackage
+        paletteName = extension.paletteName
+        paletteFile = project.file(directory +
                 separator +
-                palettePackage().replaceAll("\\.", separator) +
+                palettePackage.replaceAll("\\.", separator) +
                 separator +
-                paletteName() +
+                paletteName +
                 ".scala"
         )
-    }
-
-    protected getExtension() {
-        project.extensions.findByName(GradlePlugin.EXTENSION_NAME)
     }
 
     protected taskFailed(Throwable cause) {

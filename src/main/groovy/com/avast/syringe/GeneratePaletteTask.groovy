@@ -67,14 +67,14 @@ class GeneratePaletteTask extends SyringeTask {
         FileWriter writer = new FileWriter(palette)
         try {
             for (Class injectableClass in injectableClasses) {
-                project.logger.info("Generating builder for ${injectableClass.getName()} for ${paletteName()}")
+                project.logger.info("Generating builder for ${injectableClass.getName()} for ${paletteName}")
             }
 
             def moduleGenerator = ModuleGenerator.instance
 
             moduleGenerator.generate(
-                    palettePackage(), paletteDescription(), paletteName(),
-                    injectableClasses, paletteTraits(), builderTraits(), writer
+                    palettePackage, paletteDescription, paletteName,
+                    injectableClasses, paletteTraits, builderTraits, writer
             )
         } finally {
             writer.close();
