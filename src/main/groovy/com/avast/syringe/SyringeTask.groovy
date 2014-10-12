@@ -1,13 +1,13 @@
 package com.avast.syringe
 
+import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputFile
-import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskExecutionException
 
 import static java.io.File.separator
 
-abstract class SyringeTask extends SourceTask {
+abstract class SyringeTask extends DefaultTask {
 
     SyringeTask(String description) {
         this.description = description
@@ -32,15 +32,12 @@ abstract class SyringeTask extends SourceTask {
     @Input
     Properties builderTraits
 
-    @OutputFile
-    File paletteFile
-
     protected File paletteFile() {
         def extension = (GradlePluginExtension) project.extensions.findByName(GradlePlugin.EXTENSION_NAME);
         directory = extension.directory
         palettePackage = extension.palettePackage
         paletteName = extension.paletteName
-        paletteFile = project.file(directory +
+        project.file(directory +
                 separator +
                 palettePackage.replaceAll("\\.", separator) +
                 separator +

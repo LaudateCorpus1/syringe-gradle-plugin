@@ -13,6 +13,10 @@ import static org.junit.Assert.*
 
 class GradlePluginTest {
 
+    //TODO: See remarks and add tests accordingly.
+    //N.A remarks:
+    //  Right now the tests do not take into consideration real life case where classes, the palette should be
+    //  generated from, depend on 3rd party libraries.
     @Test
     void testPluginAddsTasksToProject() {
         def project = createTestProject()

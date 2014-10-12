@@ -7,10 +7,13 @@ import javassist.bytecode.AttributeInfo
 import javassist.bytecode.ClassFile
 import javassist.bytecode.FieldInfo
 import javassist.bytecode.annotation.Annotation
+import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskAction
 import org.reflections.ReflectionUtils
 import org.reflections.Reflections
 import org.reflections.scanners.AbstractScanner
+import org.reflections.util.ClasspathHelper
 import org.reflections.util.ConfigurationBuilder
 
 class GeneratePaletteTask extends SyringeTask {
@@ -19,9 +22,14 @@ class GeneratePaletteTask extends SyringeTask {
         super("Generates the palette source file.")
     }
 
+    @OutputFile
+    File getPaletteFile () {
+        return paletteFile()
+    }
+
     @TaskAction
     void start() {
-        def palette = paletteFile()
+        def palette = getPaletteFile()
         project.logger.info("Generating Syringe palette: {}", palette)
 
         checkPreconditions(palette)
@@ -55,9 +63,24 @@ class GeneratePaletteTask extends SyringeTask {
         injectableClassNames
     }
 
-    private static List<Class> convertNamesToClasses(List<String> classNames, File classesDirectory) {
-        def urls = (URL[]) [classesDirectory.toURI().toURL()].toArray()
-        URLClassLoader classLoader = new URLClassLoader(urls, ConfigProperty.class.getClassLoader())
+    /**
+     * Here we need to pass the classes with DI annotations to a dedicated classloader.
+     *
+     * N.A remark: For ReflectionsUtils to work, the jar files those classes depend on need to be added to this dedicated classloader also.
+     *
+     * @param classNames - list of the name of classes that contain DI annotations
+     * @param classesDirectory - classes root directory
+     * @return
+     */
+    private List<Class> convertNamesToClasses(List<String> classNames, File classesDirectory) {
+        def urls = (List<URL>) [classesDirectory.toURI().toURL()].toList()
+        def runtime = project.configurations.getByName('runtime')
+        runtime.asList().each { File file ->
+            urls.add(file.toURI().toURL())
+        }
+        project.logger.debug("classpath urls: {}", urls.join(", "))
+        project.logger.debug("classes with DI annotations: {}", classNames.join(", "))
+        URLClassLoader classLoader = new URLClassLoader(urls.toArray(new URL[0]), ConfigProperty.class.getClassLoader())
         ReflectionUtils.forNames(classNames, classLoader)
     }
 
