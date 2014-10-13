@@ -13,10 +13,6 @@ import static org.junit.Assert.*
 
 class GradlePluginTest {
 
-    //TODO: See remarks and add tests accordingly.
-    //N.A remarks:
-    //  Right now the tests do not take into consideration real life case where classes, the palette should be
-    //  generated from, depend on 3rd party libraries.
     @Test
     void testPluginAddsTasksToProject() {
         def project = createTestProject()
@@ -72,7 +68,7 @@ class GradlePluginTest {
             }
         }
 
-        copyTestClass(project)
+        copyTestClass(project, "TestClass.class")
 
         def testPalette = project.file("syringe/com/avast/test/TestPalette.scala")
 
@@ -100,10 +96,10 @@ class GradlePluginTest {
         assertTrue(palette.createNewFile())
     }
 
-    private static void copyTestClass(Project project) {
-        def target = Paths.get(project.sourceSets.main.output.classesDir.absolutePath, "TestClass.class")
+    private static void copyTestClass(Project project, String name) {
+        def target = Paths.get(project.sourceSets.main.output.classesDir.absolutePath, name)
         target.toFile().parentFile.mkdirs()
-        Files.copy(new File(getClass().getResource("/TestClass.class").toURI()).toPath(), target)
+        Files.copy(new File(getClass().getResource("/$name").toURI()).toPath(), target)
     }
 
 }
