@@ -15,7 +15,7 @@ class GradlePlugin implements Plugin<Project> {
     void apply(Project project) {
         this.project = project
 
-        enableScalaPlugin(project)
+        enableScalaPlugin()
         registerExtension()
 
         project.task("deletePalette", type: DeletePaletteTask)
@@ -35,7 +35,7 @@ class GradlePlugin implements Plugin<Project> {
         extension = project.extensions.create(EXTENSION_NAME, GradlePluginExtension)
     }
 
-    private static enableScalaPlugin(Project project) {
+    private enableScalaPlugin() {
         project.plugins.apply(ScalaPlugin)
     }
 
