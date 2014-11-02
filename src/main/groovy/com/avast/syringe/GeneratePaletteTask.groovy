@@ -30,7 +30,7 @@ class GeneratePaletteTask extends SyringeTask {
         def palette = getPaletteFile()
         project.logger.info("Generating Syringe palette: {}", palette)
 
-        checkPreconditions(palette)
+        //checkPreconditions(palette)
         createDirectories(palette)
         def classesDirectory = project.sourceSets.main.output.classesDir
 
