@@ -15,7 +15,6 @@ dependencies {
     compile "com.avast:syringe_2.10:1.6.13"
     compile "org.reflections:reflections:0.9.9"
     compile "org.apache.commons:commons-vfs2:2.0" // optional but necessary (one of several implementations) dependency of the reflections library
-    compile "javax.servlet:servlet-api:2.5"
 }
 
 task javadocJar(type: Jar) {
