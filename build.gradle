@@ -4,7 +4,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 group = "com.avast"
-version = "1.0.1"
+version = "1.0-SNAPSHOT"
 archivesBaseName = "syringe-gradle-plugin"
 
 repositories {
