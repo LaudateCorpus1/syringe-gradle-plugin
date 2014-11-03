@@ -30,7 +30,6 @@ class GeneratePaletteTask extends SyringeTask {
         def palette = getPaletteFile()
         project.logger.info("Generating Syringe palette: {}", palette)
 
-        //checkPreconditions(palette)
         createDirectories(palette)
         def classesDirectory = project.sourceSets.main.output.classesDir
 
@@ -47,12 +46,6 @@ class GeneratePaletteTask extends SyringeTask {
         generatePalette(injectableClasses, palette)
 
         project.logger.debug("Syringe palette generated: {}", palette)
-    }
-
-    private checkPreconditions(File palette) {
-        if (palette.exists()) {
-            taskFailed(new IllegalStateException("Syringe palette $palette already exists!"))
-        }
     }
 
     private static void createDirectories(File palette) {

@@ -4,7 +4,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 group = "com.avast"
-version = "1.0.0"
+version = "1.0-SNAPSHOT"
 archivesBaseName = "syringe-gradle-plugin"
 
 repositories {
@@ -15,6 +15,7 @@ dependencies {
     compile "com.avast:syringe_2.10:1.6.13"
     compile "org.reflections:reflections:0.9.9"
     compile "org.apache.commons:commons-vfs2:2.0" // optional but necessary (one of several implementations) dependency of the reflections library
+    compile "javax.servlet:servlet-api:2.5"
 }
 
 task javadocJar(type: Jar) {
@@ -31,7 +32,11 @@ artifacts {
     archives javadocJar, sourcesJar
 }
 
+//Conditional Signing
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+
 signing {
+    required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
     sign configurations.archives
 }
 
