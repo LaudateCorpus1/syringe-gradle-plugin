@@ -5,6 +5,8 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskExecutionException
 
+import java.util.regex.Matcher
+
 import static java.io.File.separator
 
 abstract class SyringeTask extends DefaultTask {
@@ -39,7 +41,7 @@ abstract class SyringeTask extends DefaultTask {
         paletteName = extension.paletteName
         project.file(directory +
                 separator +
-                palettePackage.replaceAll("\\.", separator) +
+                palettePackage.replaceAll("\\.", Matcher.quoteReplacement(separator)) +
                 separator +
                 paletteName +
                 ".scala"
